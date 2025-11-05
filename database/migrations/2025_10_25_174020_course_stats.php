@@ -13,10 +13,6 @@ return new class extends Migration
     {
     Schema::create('course_stats', function (Blueprint $table) {
     $table->id();
-
-
-
-    
     $table->foreignId('course_id')->constrained()->onDelete('cascade');
     $table->integer('views')->default(0);
     $table->integer('enrolled_students')->default(0);
