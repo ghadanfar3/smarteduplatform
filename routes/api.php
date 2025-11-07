@@ -10,9 +10,10 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 Route::post('/login', [AuthController::class, 'login'] )->name("login");
 Route::post('/register', [AuthController::class, 'register'] )->name("register");
+
 Route::controller(CourseController::class)->group(function (){
     Route::get('/courses','index')->name("Courses") ;
-    Route::post('/addcourse','store')->name("addcourse") ;
+    Route::post('/add-course','store')->name("add-course") ;
 
 });
 
