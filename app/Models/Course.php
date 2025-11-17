@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
 {
+    protected $fillable=["title", "imgpath", "description"];
     public function teacher() {
         return $this->belongsTo(User::class, 'teacher_id');
     }

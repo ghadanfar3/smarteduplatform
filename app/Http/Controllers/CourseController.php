@@ -22,7 +22,7 @@ class CourseController extends Controller
             'imgpath' => 'nullable|string',
         ]);
         // التحقق أن المستخدم الحالي هو أستاذ
-        if (auth()->user()->role=== 'teacher'){
+
             // إنشاء الدرس وربطه بالأستاذ الحالي
             $course = auth()->user()->courses()->create([
                 'title' => $validated['title'],
@@ -34,10 +34,5 @@ class CourseController extends Controller
                 'message' => 'تم إنشاء الدرس بنجاح',
                 'course' => $course
             ], 201);
-    }
-
-        return response()->json([
-            'message' => 'غير مسموح لك بإنشاء درس'
-        ], 403);
     }
 }

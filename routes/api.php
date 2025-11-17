@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
+use App\Http\Middleware\IsAdmin;
+use App\Http\Middleware\IsTeacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -11,7 +13,7 @@ Route::get('/user', function (Request $request) {
 Route::post('/login', [AuthController::class, 'login'] )->name("login");
 Route::post('/register', [AuthController::class, 'register'] )->name("register");
 
-Route::controller(CourseController::class)->group(function (){
+Route::controller(CourseController::class)->middleware(['auth:sanctum', isTeacher::class])->group(function (){
     Route::get('/courses','index')->name("Courses") ;
     Route::post('/add-course','store')->name("add-course") ;
 
