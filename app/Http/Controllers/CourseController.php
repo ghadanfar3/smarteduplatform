@@ -1,18 +1,24 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\Course;
 use Illuminate\Http\Request;
+
 
 class CourseController extends Controller
 {
     public function index(){
-        return response()->json(['course'=>Course::all()]);
+        $courses = Course::with('teacher')->where('is_active', true)->get();
+        return response()->json($courses);
     }
 
-    public function create(){
+    // عرض دورة واحدة
+    public function show($id)
+    {
+        $course = Course::with(['teacher', 'lessons', 'reviews'])->findOrFail($id);
+        return response()->json($course);
     }
+    //create course just teacher
     public function store(Request $request)
     {
         // التحقق من البيانات المرسلة
@@ -34,5 +40,21 @@ class CourseController extends Controller
                 'message' => 'تم إنشاء الدرس بنجاح',
                 'course' => $course
             ], 201);
+    }
+
+    //edit course
+    public function update(Request $request, $id)
+    {
+        $course = Course::findOrFail($id);
+        $course->update($request->only(['title', 'description']));
+        return response()->json($course);
+    }
+
+    // حذف دورة
+    public function destroy($id)
+    {
+        $course = Course::findOrFail($id);
+        $course->delete();
+        return response()->json(['message' => 'تم حذف الدورة بنجاح']);
     }
 }

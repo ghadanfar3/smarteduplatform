@@ -9,6 +9,18 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    //register new user
+    public function register(Request $request){
+        $user = new User() ;
+        $user->name = $request->name ;
+        $user->email = $request->email ;
+        $user->password = $request->password ;
+        $user->role = $request->role ;
+        $user->save();
+        return response()->json($user, 200) ;
+    }
+
+    //login
     public function login (Request $request) {
         $request->validate([
             'email' => 'required|email',
@@ -24,14 +36,10 @@ class AuthController extends Controller
         }
         return response()->json(["user"=> $user, "token" =>$user->createToken($request->email)->plainTextToken ], 200) ;
     }
-
-    public function register(Request $request){
-        $user = new User() ;
-        $user->name = $request->name ;
-        $user->email = $request->email ;
-        $user->password = $request->password ;
-        $user->role = $request->role ;
-        $user->save();
-        return response()->json($user, 200) ;
+    //logout
+    public function logout(Request $request)
+    {
+        $request->user()->tokens()->delete();
+        return response()->json(['message' => 'تم تسجيل الخروج']);
     }
 }
