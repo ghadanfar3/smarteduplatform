@@ -36,6 +36,17 @@ class AuthController extends Controller
         }
         return response()->json(["user"=> $user, "token" =>$user->createToken($request->email)->plainTextToken ], 200) ;
     }
+    public function update(Request $request,$id){
+        $user = User::find0rFail($id) ;
+        $user->update($request->only(['email', 'name', 'password'])) ;
+        return response()->json($user) ;
+    }
+
+    public function destroy($id){
+        $user  =user::find0rFail($id) ;
+        $user->delete() ;
+        return response()->json(['message'=>'تم حذف المستخدم بنجاح']) ;
+    }
     //logout
     public function logout(Request $request)
     {

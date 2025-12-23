@@ -46,7 +46,22 @@ class EnrollmentController extends Controller
             return response()->json(['error' => 'فقط الطلاب يمكنهم عرض دوراتهم'], 403);
         }
 
-        $courses = $user->enrollments()->with('course')->get()->pluck('course');
-        return response()->json($courses);
+        $enrollments = Enrollment::where('user_id', $user->id)
+            ->with('course.teacher') // المدرّس
+            ->get()
+            ->map(function ($enrollment) {
+                $course = $enrollment->course;
+
+                return [
+                    'course_id' => $course->id,
+                    'title'     => $course->title,
+                    'description' => $course->description,
+                    'teacher'   => $course->teacher->name ?? null,
+                    'progress'  => $enrollment->progress, // النسبة المئوية فقط
+                ];
+            });
+
+        return response()->json($enrollments);
     }
+
 }

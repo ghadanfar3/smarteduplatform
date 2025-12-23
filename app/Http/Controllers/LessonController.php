@@ -27,6 +27,7 @@ class LessonController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'content'=>'required|string',
         ]);
 
         $course = Course::findOrFail($courseId);
@@ -40,6 +41,7 @@ class LessonController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'course_id' => $courseId,
+            'content'=>'required|string',
         ]);
 
         return response()->json($lesson, 201);
