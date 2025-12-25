@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Course;
 use Illuminate\Support\Facades\DB;
 use App\Models\Lesson;
 use App\Models\Enrollment;

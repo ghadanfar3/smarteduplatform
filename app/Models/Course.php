@@ -23,8 +23,6 @@ class Course extends Model
         return $this->hasMany(Review::class);
     }
 
-
-
     public function comments() {
         return $this->hasMany(Comment::class);
     }
@@ -33,7 +31,6 @@ class Course extends Model
         return $this->hasMany(Rating::class);
     }
 
-
     public function quizzes() {
         return $this->hasMany(Quiz::class);
     }
@@ -41,5 +38,37 @@ class Course extends Model
     public function stats() {
         return $this->hasOne(CourseStat::class);
     }
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($course) {
+            // حذف الدروس
+            $course->lessons()->each(function ($lesson) {
+                // حذف الفيديو
+                if ($lesson->video_path) {
+                    \Storage::disk('public')->delete($lesson->video_path);
+                }
+                $lesson->delete();
+            });
+
+            // حذف الاشتراكات
+            $course->enrollments()->delete();
+
+            // حذف الاختبار مع الأسئلة والخيارات
+            if ($course->quiz) {
+                foreach ($course->quiz->questions as $question) {
+                    $question->options()->delete();
+                }
+                $course->quiz->questions()->delete();
+                $course->quiz()->delete();
+            }
+
+            // حذف التعليقات أو التقييمات
+            $course->reviews()->delete();
+        });
+    }
+
+
 
 }
