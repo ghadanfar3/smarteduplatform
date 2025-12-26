@@ -15,12 +15,12 @@ class ProgressController extends Controller
 
         // تحقق من وجود انتساب
         $enrollment = Enrollment::where('course_id', $course->id)
-            ->where('student_id', $studentId)
+            ->where('user_id', $studentId)
             ->firstOrFail();
 
         // سجّل اكتمال الدرس (idempotent بسبب unique)
         DB::table('lesson_completions')->updateOrInsert(
-            ['lesson_id' => $lesson->id, 'student_id' => $studentId],
+            ['lesson_id' => $lesson->id, 'user_id' => $studentId],
             ['completed_at' => now()]
         );
 
@@ -28,7 +28,7 @@ class ProgressController extends Controller
         // احسب عدد الدروس
         $total = $course->lessons()->count();
         $completed = DB::table('lesson_completions')
-            ->where('student_id',$studentId)
+            ->where('user_id',$studentId)
             ->whereIn('lesson_id',$course->lessons()->pluck('id'))
             ->count();
 

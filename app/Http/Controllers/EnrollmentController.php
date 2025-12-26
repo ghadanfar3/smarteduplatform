@@ -32,6 +32,7 @@ class EnrollmentController extends Controller
         $enrollment = Enrollment::create([
             'user_id' => $user->id,
             'course_id' => $course->id,
+            'progress' => 0,
         ]);
 
         return response()->json(['message' => 'تم الاشتراك بنجاح', 'enrollment' => $enrollment]);

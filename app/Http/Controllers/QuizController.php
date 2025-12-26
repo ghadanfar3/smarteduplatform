@@ -73,8 +73,9 @@ class QuizController extends Controller
         $answers = $request->input('answers');
         // شكلها: [question_id => option_id]
 
+        $total = 5;
         $score = 0;
-        $total = $quiz->questions->count();
+
 
         foreach ($quiz->questions as $question) {
             if (isset($answers[$question->id])) {
@@ -87,12 +88,17 @@ class QuizController extends Controller
             }
         }
 
+        $passed = $score >= 3;
+
+
         $result = QuizResult::create([
             'user_id' => $user->id,
             'quiz_id' => $quiz->id,
             'score'   => $score,
-            'total'   => $total,
+            'total'   => 5,
+            'passed'  => $passed,
         ]);
+
 
         return response()->json([
             'message' => 'تم إرسال الإجابات',

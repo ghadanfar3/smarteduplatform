@@ -18,14 +18,14 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnDelete();
 
-            $table->foreignId('student_id')
+            $table->foreignId('user_id')
                 ->constrained('users')
                 ->cascadeOnDelete();
 
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
 
-            $table->unique(['lesson_id', 'student_id']); // يمنع التكرار
+            $table->unique(['lesson_id', 'user_id']); // يمنع التكرار
         });
 
     }

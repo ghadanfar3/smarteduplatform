@@ -21,8 +21,8 @@ class lesson extends Model
     protected static function booted()
     {
         static::deleting(function ($lesson) {
-            if ($lesson->video_path && Storage::disk('public')->exists($lesson->video_path)) {
-                Storage::disk('public')->delete($lesson->video_path);
+            if ($lesson->videoPath && Storage::disk('public')->exists($lesson->videoPath)) {
+                Storage::disk('public')->delete($lesson->videoPath);
             }
         });
     }

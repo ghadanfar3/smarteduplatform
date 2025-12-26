@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Models;
-use App\Models\Opition ;
 use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model

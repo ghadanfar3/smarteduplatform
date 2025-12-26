@@ -19,7 +19,7 @@ class LessonController extends Controller
 
 
         $completedLessonIds = DB::table('lesson_completions')
-            ->where('student_id', auth()->id())
+            ->where('user_id', auth()->id())
             ->pluck('lesson_id')
             ->toArray();
 
@@ -35,7 +35,10 @@ class LessonController extends Controller
     {
         $lesson = Lesson::findOrFail($id);
         $lesson->video_url = asset('storage/' . $lesson->videoPath);
-        $lesson->is_completed = false;
+        $lesson->is_completed = DB::table('lesson_completions')
+            ->where('user_id', auth()->id())
+            ->where('lesson_id', $lesson->id)
+            ->exists();
         return response()->json($lesson);
     }
 
